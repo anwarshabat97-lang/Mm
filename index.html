@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEGEND ARENA - دور الثمانية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Tahoma', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 30%, #2a1a3e 60%, #0a0a1a 100%);
+        }
+
+        .bg-animation .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-animation .orb:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #f7c94820, #f7c94805);
+            top: -10%;
+            right: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg-animation .orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #ff6b6b15, #ff6b6b05);
+            bottom: -20%;
+            left: -10%;
+            animation-delay: -3s;
+        }
+
+        .bg-animation .orb:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #4ecdc420, #4ecdc405);
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -5s;
+        }
+
+        .bg-animation .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #f7c948;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #f7c948, 0 0 30px #f7c94840;
+            animation: sparkle 4s ease-in-out infinite;
+        }
+
+        .bg-animation .sparkle:nth-child(4) { top: 15%; left: 10%; animation-delay: 0s; }
+        .bg-animation .sparkle:nth-child(5) { top: 25%; right: 15%; animation-delay: -1s; }
+        .bg-animation .sparkle:nth-child(6) { bottom: 30%; left: 20%; animation-delay: -2s; }
+        .bg-animation .sparkle:nth-child(7) { bottom: 20%; right: 10%; animation-delay: -3s; }
+        .bg-animation .sparkle:nth-child(8) { top: 50%; left: 5%; animation-delay: -0.5s; }
+        .bg-animation .sparkle:nth-child(9) { top: 60%; right: 5%; animation-delay: -2.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 35px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 42px;
+            letter-spacing: 4px;
+            font-weight: 900;
+            text-shadow: 0 0 40px rgba(247, 201, 72, 0.2), 0 0 80px rgba(247, 201, 72, 0.05);
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #f7c948, #f5a623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+
+        .header .subtitle {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.15);
+            letter-spacing: 8px;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        .header .round-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 30px;
+            background: linear-gradient(135deg, #f7c948, #f5a623);
+            border-radius: 50px;
+            color: #0a0a1a;
+            font-weight: 900;
+            font-size: 18px;
+            letter-spacing: 3px;
+            box-shadow: 0 8px 30px rgba(247, 201, 72, 0.2);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #f7c948, #f5a623);
+            color: #0a0a1a;
+            box-shadow: 0 8px 30px rgba(247, 201, 72, 0.25);
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bracket-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 10px 0;
+        }
+
+        .match-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 20px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(247, 201, 72, 0.02), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .match-card:hover::before {
+            opacity: 1;
+        }
+
+        .match-card:hover {
+            border-color: rgba(247, 201, 72, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .match-card .match-number {
+            background: rgba(247, 201, 72, 0.08);
+            color: #f7c948;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+            border: 1px solid rgba(247, 201, 72, 0.05);
+        }
+
+        .match-card .match-teams {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .match-card .match-teams .team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .match-card .match-teams .team .flag {
+            font-size: 28px;
+        }
+
+        .match-card .match-teams .vs {
+            color: rgba(255, 255, 255, 0.15);
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 2px;
+            padding: 0 10px;
+        }
+
+        .match-card .match-status {
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        th {
+            background: rgba(247, 201, 72, 0.08);
+            color: #f7c948;
+            padding: 18px 14px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 2px solid rgba(247, 201, 72, 0.08);
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 16px 14px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        tr {
+            transition: all 0.3s ease;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .team-name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .matches-message {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 18px;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.04);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: linear-gradient(145deg, rgba(20, 15, 40, 0.95), rgba(10, 10, 30, 0.98));
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(247, 201, 72, 0.08);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            animation: modalIn 0.4s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-box h2 {
+            color: #f7c948;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .modal-box .player-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 6px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .modal-box .player-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(247, 201, 72, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .modal-box .player-item .flag {
+            font-size: 28px;
+        }
+
+        .modal-box .close-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 40px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-box .close-btn:hover {
+            background: #e74c3c;
+            transform: scale(1.02);
+        }
+
+        .modal-box .no-players {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            padding: 30px 0;
+            font-size: 18px;
+        }
+
+        .player-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(25px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .player-modal-overlay.active {
+            display: flex;
+        }
+
+        .player-modal-box {
+            background: linear-gradient(145deg, rgba(25, 20, 50, 0.98), rgba(10, 10, 30, 0.99));
+            border-radius: 30px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(247, 201, 72, 0.06);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9);
+            animation: modalIn 0.4s ease;
+            text-align: center;
+        }
+
+        .player-modal-box .player-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(247, 201, 72, 0.05), rgba(247, 201, 72, 0.01));
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(247, 201, 72, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-modal-box .player-avatar .placeholder {
+            font-size: 55px;
+            color: rgba(255, 255, 255, 0.05);
+        }
+
+        .player-modal-box .player-flag {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #0a0a1a;
+            background: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .player-modal-box .player-name {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .player-modal-box .player-team {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .player-modal-box .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .player-modal-box .stat-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 18px 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .player-modal-box .stat-item .stat-icon {
+            font-size: 26px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .player-modal-box .stat-item .stat-number {
+            color: #f7c948;
+            font-size: 24px;
+            font-weight: 900;
+            display: block;
+            text-shadow: 0 0 30px rgba(247, 201, 72, 0.1);
+        }
+
+        .player-modal-box .stat-item .stat-label {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 11px;
+            display: block;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        .player-modal-box .close-btn-player {
+            display: block;
+            margin: 15px auto 0;
+            padding: 12px 40px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .player-modal-box .close-btn-player:hover {
+            background: #e74c3c;
+            transform: scale(1.02);
+        }
+
+        .admin-link { display: none !important; }
+        #adminPage { display: none !important; }
+
+        .modal-box::-webkit-scrollbar { width: 4px; }
+        .modal-box::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 10px; }
+        .modal-box::-webkit-scrollbar-thumb { background: rgba(247, 201, 72, 0.15); border-radius: 10px; }
+
+        .hint {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; border-radius: 25px; }
+            .header h1 { font-size: 28px; }
+            .header .subtitle { font-size: 11px; letter-spacing: 4px; }
+            .header .round-badge { font-size: 14px; padding: 6px 20px; }
+            .tab-btn { padding: 10px 18px; font-size: 13px; }
+            th, td { padding: 12px 8px; font-size: 13px; }
+            .match-card { flex-wrap: wrap; gap: 12px; justify-content: center; padding: 15px; }
+            .match-card .match-teams { flex-wrap: wrap; gap: 10px; }
+            .match-card .match-teams .team { font-size: 14px; }
+            .match-card .match-teams .team .flag { font-size: 22px; }
+            .match-card .match-status { font-size: 10px; }
+            .match-card .match-number { font-size: 12px; padding: 4px 12px; min-width: 40px; }
+            .player-modal-box { padding: 25px 18px; }
+            .player-modal-box .player-avatar { width: 100px; height: 100px; }
+            .player-modal-box .player-name { font-size: 20px; }
+            .player-modal-box .stats-grid { gap: 8px; }
+            .player-modal-box .stat-item { padding: 12px 8px; }
+            .modal-box { padding: 25px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
+
+    <div id="mainPage" class="container">
+        <div class="header">
+            <h1>🏆 <span>LEGEND</span> ARENA</h1>
+            <span class="subtitle">— البطولة الذهبية —</span>
+            <div class="round-badge">🏅 دور الثمانية</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="bracket">🏅 المباريات</button>
+            <button class="tab-btn" data-tab="goals">⚽ الهدافين</button>
+            <button class="tab-btn" data-tab="matches">📅 المباريات</button>
+        </div>
+
+        <div id="bracket" class="tab-content active">
+            <div class="bracket-container" id="bracketContainer"></div>
+        </div>
+
+        <div id="goals" class="tab-content">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>اللاعب</th><th>الفريق</th><th>الأهداف</th></tr>
+                </thead>
+                <tbody id="goalsBody"></tbody>
+            </table>
+            <div class="hint">👆 اضغط على أي لاعب لعرض إحصائياته</div>
+        </div>
+
+        <div id="matches" class="tab-content">
+            <div class="matches-message">
+                ⏳ لم يتم تحديد توقيت المباريات
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== نافذة الفريق (اللاعبين) ===== -->
+    <div class="modal-overlay" id="playersModal">
+        <div class="modal-box">
+            <h2 id="modalTeamName">🏆 الفريق</h2>
+            <div id="modalPlayersList"></div>
+            <button class="close-btn" onclick="closeModal()">✕ إغلاق</button>
+        </div>
+    </div>
+
+    <!-- ===== نافذة اللاعب ===== -->
+    <div class="player-modal-overlay" id="playerModal">
+        <div class="player-modal-box">
+            <div class="player-avatar" id="playerAvatar">
+                <span class="placeholder">👤</span>
+                <div class="player-flag" id="playerFlag">🇸🇾</div>
+            </div>
+            <div class="player-name" id="playerNameDisplay">اسم اللاعب</div>
+            <div class="player-team" id="playerTeamDisplay">الفريق</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-icon">⚽</span>
+                    <span class="stat-number" id="playerGoals">0</span>
+                    <span class="stat-label">الأهداف</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-number" id="playerAssists">0</span>
+                    <span class="stat-label">الأسيست</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">📊</span>
+                    <span class="stat-number" id="playerMatches">0</span>
+                    <span class="stat-label">المباريات</span>
+                </div>
+            </div>
+            <button class="close-btn-player" onclick="closePlayerModal()">✕ إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        const SYRIAN_FLAG = "🇸🇾";
+
+        // ===== المباريات =====
+        const BRACKET_MATCHES = [
+            { id: 1, team1: "Al Nukhba", team2: "Alpha squad", date: "1/7/26", flag1: "🇸🇾", flag2: "🇸🇾" },
+            { id: 2, team1: "العرب", team2: "team fc", date: "2/7/26", flag1: "🇸🇾", flag2: "🇸🇾" },
+            { id: 3, team1: "بني خالد 911", team2: "CUKUR FFC", date: "3/7/26", flag1: "🇸🇾", flag2: "🇸🇾" },
+            { id: 4, team1: "Star club", team2: "Al NASER", date: "4/7/26", flag1: "🇸🇾", flag2: "🇸🇾" }
+        ];
+
+        const DEFAULT_DATA = {
+            teams: [
+                { name: "FC ALNUKHAB", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "بني خالد 911", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "العرب", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "Al NASER", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "CUKUR FFC", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "team fc", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "Star club", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "Al Nukhba", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "Alpha squad", played: 0, wins: 0, losses: 0, points: 0 }
+            ],
+            players: [
+                // Al Nukhba (6)
+                { name: "مراد العفنان", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                { name: "يوسف الجسري", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                { name: "طارق", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                { name: "ياسين", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                { name: "عبد الرحمن تلاوي", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                { name: "ميار", team: "Al Nukhba", goals: 0, assists: 0, matches: 0 },
+                // بني خالد 911 (2 + 3 = 5)
+                { name: "جاسم", team: "بني خالد 911", goals: 0, assists: 0, matches: 0 },
+                { name: "مازن", team: "بني خالد 911", goals: 0, assists: 0, matches: 0 },
+                { name: "محمد عمير", team: "بني خالد 911", goals: 0, assists: 0, matches: 0 },
+                { name: "وليد", team: "بني خالد 911", goals: 0, assists: 0, matches: 0 },
+                { name: "عبدلله رسلان", team: "بني خالد 911", goals: 0, assists: 0, matches: 0 },
+                // العرب (6)
+                { name: "ميسم الشباط", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                { name: "سمهر السباعي", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                { name: "عبد الرحمن تركماني", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                { name: "أدهم مشارقه", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                { name: "وجدي النجار", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                { name: "عبد الحفيظ زكور", team: "العرب", goals: 0, assists: 0, matches: 0 },
+                // Al NASER (5)
+                { name: "مهند قواس", team: "Al NASER", goals: 0, assists: 0, matches: 0 },
+                { name: "جميل", team: "Al NASER", goals: 0, assists: 0, matches: 0 },
+                { name: "عمر", team: "Al NASER", goals: 0, assists: 0, matches: 0 },
+                { name: "فراس", team: "Al NASER", goals: 0, assists: 0, matches: 0 },
+                { name: "همام", team: "Al NASER", goals: 0, assists: 0, matches: 0 },
+                // CUKUR FFC (7)
+                { name: "شعار", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "فهد", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "مالك", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "زين المغربل", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "علي كلزلي", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "ياسر الكحيل", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                { name: "عبد المتين عثمان", team: "CUKUR FFC", goals: 0, assists: 0, matches: 0 },
+                // team fc (1)
+                { name: "عزت", team: "team fc", goals: 0, assists: 0, matches: 0 },
+                // Star club (5)
+                { name: "ورد", team: "Star club", goals: 0, assists: 0, matches: 0 },
+                { name: "ملاذ", team: "Star club", goals: 0, assists: 0, matches: 0 },
+                { name: "عمر مخزوم", team: "Star club", goals: 0, assists: 0, matches: 0 },
+                { name: "سامي", team: "Star club", goals: 0, assists: 0, matches: 0 },
+                { name: "حوراني", team: "Star club", goals: 0, assists: 0, matches: 0 }
+            ]
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem('leagueData');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    return DEFAULT_DATA;
+                }
+            } else {
+                saveData(DEFAULT_DATA);
+                return DEFAULT_DATA;
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem('leagueData', JSON.stringify(data));
+        }
+
+        function getData() {
+            return loadData();
+        }
+
+        function renderBracket() {
+            const container = document.getElementById('bracketContainer');
+            container.innerHTML = BRACKET_MATCHES.map(m => `
+                <div class="match-card" onclick="showMatchTeams('${m.team1}', '${m.team2}', '${m.date}')">
+                    <div class="match-number">#${m.id}</div>
+                    <div class="match-teams">
+                        <div class="team">
+                            <span class="flag">${m.flag1}</span>
+                            <span class="team-name">${m.team1}</span>
+                        </div>
+                        <div class="vs">⚔️</div>
+                        <div class="team">
+                            <span class="flag">${m.flag2}</span>
+                            <span class="team-name">${m.team2}</span>
+                        </div>
+                    </div>
+                    <div class="match-status">📅 ${m.date}</div>
+                </div>
+            `).join('');
+        }
+
+        function showMatchTeams(team1, team2, date) {
+            const data = getData();
+            const players1 = data.players.filter(p => p.team === team1);
+            const players2 = data.players.filter(p => p.team === team2);
+            const modal = document.getElementById('playersModal');
+            const modalTitle = document.getElementById('modalTeamName');
+            const modalList = document.getElementById('modalPlayersList');
+
+            modalTitle.textContent = `🏆 ${team1} ⚔️ ${team2} (${date})`;
+
+            let html = '';
+            if (players1.length > 0) {
+                html += `<div style="color:#f7c948;font-weight:700;margin:10px 0 5px;">🔵 ${team1}</div>`;
+                html += players1.map(p => `
+                    <div class="player-item" onclick="event.stopPropagation(); showPlayerStats('${p.name}')">
+                        <span class="flag">${SYRIAN_FLAG}</span>
+                        <span>${p.name}</span>
+                        <span style="color:rgba(255,255,255,0.15);font-size:13px;margin-right:auto;">سوريا</span>
+                    </div>
+                `).join('');
+            } else {
+                html += `<div style="color:rgba(255,255,255,0.2);padding:5px 0;">🚫 لا يوجد لاعبون في ${team1}</div>`;
+            }
+
+            if (players2.length > 0) {
+                html += `<div style="color:#f7c948;font-weight:700;margin:15px 0 5px;">🔴 ${team2}</div>`;
+                html += players2.map(p => `
+                    <div class="player-item" onclick="event.stopPropagation(); showPlayerStats('${p.name}')">
+                        <span class="flag">${SYRIAN_FLAG}</span>
+                        <span>${p.name}</span>
+                        <span style="color:rgba(255,255,255,0.15);font-size:13px;margin-right:auto;">سوريا</span>
+                    </div>
+                `).join('');
+            } else {
+                html += `<div style="color:rgba(255,255,255,0.2);padding:5px 0;">🚫 لا يوجد لاعبون في ${team2}</div>`;
+            }
+
+            modalList.innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('playersModal').classList.remove('active');
+        }
+
+        function renderGoals(data) {
+            const tbody = document.getElementById('goalsBody');
+            const sorted = [...data.players].sort((a, b) => b.goals - a.goals);
+            tbody.innerHTML = sorted.map((p, i) => `
+                <tr onclick="showPlayerStats('${p.name}')">
+                    <td>${i + 1}</td>
+                    <td class="team-name">${p.name}</td>
+                    <td>${p.team}</td>
+                    <td>${p.goals}</td>
+                </tr>
+            `).join('');
+        }
+
+        function showPlayerStats(playerName) {
+            const data = getData();
+            const player = data.players.find(p => p.name === playerName);
+            if (!player) return;
+
+            document.getElementById('playerNameDisplay').textContent = player.name;
+            document.getElementById('playerTeamDisplay').textContent = `🏟️ ${player.team}`;
+            document.getElementById('playerGoals').textContent = player.goals || 0;
+            document.getElementById('playerAssists').textContent = player.assists || 0;
+            document.getElementById('playerMatches').textContent = player.matches || 0;
+            document.getElementById('playerFlag').textContent = SYRIAN_FLAG;
+
+            document.getElementById('playerModal').classList.add('active');
+        }
+
+        function closePlayerModal() {
+            document.getElementById('playerModal').classList.remove('active');
+        }
+
+        document.getElementById('playersModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.getElementById('playerModal').addEventListener('click', function(e) {
+            if (e.target === this) closePlayerModal();
+        });
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('leagueData')) {
+                saveData(DEFAULT_DATA);
+            }
+            renderBracket();
+            renderGoals(getData());
+            setupTabs();
+        });
+    </script>
+
+</body>
+</html>
