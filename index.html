@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEGEND ARENA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+            font-size: 38px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            font-weight: 900;
+        }
+
+        h1 span {
+            color: #f7c948;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.20);
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: #f7c948;
+            color: #1a1a2e;
+            box-shadow: 0 4px 20px rgba(247, 201, 72, 0.3);
+            border-color: #f7c948;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fade 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: rgba(247, 201, 72, 0.20);
+            color: #f7c948;
+            padding: 16px 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 2px solid rgba(247, 201, 72, 0.15);
+        }
+
+        td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #e0e0e0;
+            font-size: 15px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .team-name {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .points-highlight {
+            font-weight: bold;
+            color: #f7c948;
+            font-size: 18px;
+        }
+
+        .matches-message {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== إخفاء لوحة التحكم نهائياً ===== */
+        .admin-link {
+            display: none !important;
+        }
+
+        #adminPage {
+            display: none !important;
+        }
+
+        .admin-panel {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mainPage" class="container">
+        <h1>🏆 <span>LEGEND</span> ARENA</h1>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="teams">ترتيب الفرق</button>
+            <button class="tab-btn" data-tab="goals">الهدافين</button>
+            <button class="tab-btn" data-tab="matches">المباريات</button>
+        </div>
+
+        <div id="teams" class="tab-content active">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الفريق</th>
+                        <th>مباريات</th>
+                        <th>فوز</th>
+                        <th>خسارة</th>
+                        <th>نقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="teamsBody"></tbody>
+            </table>
+        </div>
+
+        <div id="goals" class="tab-content">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>اللاعب</th><th>الفريق</th><th>الأهداف</th></tr>
+                </thead>
+                <tbody id="goalsBody"></tbody>
+            </table>
+        </div>
+
+        <div id="matches" class="tab-content">
+            <div class="matches-message">
+                ⏳ لم يتم تحديد توقيت المباريات
+            </div>
+        </div>
+
+        <!-- تم حذف زر الإداري نهائياً ✅ -->
+
+    </div>
+
+    <script>
+        const DEFAULT_DATA = {
+            teams: [
+                { name: "FC ALNUKHAB", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "بني خالد 911", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "العرب", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "Al NASER", played: 0, wins: 0, losses: 0, points: 0 },
+                { name: "CUKUR FFC", played: 0, wins: 0, losses: 0, points: 0 }
+            ],
+            players: [
+                { name: "مراد العفنان", team: "FC ALNUKHAB", goals: 0 },
+                { name: "يوسف الجسري", team: "FC ALNUKHAB", goals: 0 },
+                { name: "طارق", team: "FC ALNUKHAB", goals: 0 },
+                { name: "ياسين", team: "FC ALNUKHAB", goals: 0 },
+                { name: "عبد الرحمن تلاوي", team: "FC ALNUKHAB", goals: 0 },
+                { name: "ميار", team: "FC ALNUKHAB", goals: 0 },
+                { name: "جاسم", team: "بني خالد 911", goals: 0 },
+                { name: "مازن", team: "بني خالد 911", goals: 0 },
+                { name: "ميسم الشباط", team: "العرب", goals: 0 },
+                { name: "سمهر السباعي", team: "العرب", goals: 0 },
+                { name: "عبد الرحمن تركماني", team: "العرب", goals: 0 },
+                { name: "أدهم مشارقه", team: "العرب", goals: 0 },
+                { name: "وجدي النجار", team: "العرب", goals: 0 },
+                { name: "عبد الحفيظ زكور", team: "العرب", goals: 0 },
+                { name: "مهند قواس", team: "Al NASER", goals: 0 },
+                { name: "جميل", team: "Al NASER", goals: 0 },
+                { name: "عمر", team: "Al NASER", goals: 0 },
+                { name: "فراس", team: "Al NASER", goals: 0 },
+                { name: "همام", team: "Al NASER", goals: 0 },
+                { name: "شعار", team: "CUKUR FFC", goals: 0 },
+                { name: "فهد", team: "CUKUR FFC", goals: 0 },
+                { name: "مالك", team: "CUKUR FFC", goals: 0 }
+            ]
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem('leagueData');
+            if (saved) {
+                return JSON.parse(saved);
+            } else {
+                saveData(DEFAULT_DATA);
+                return DEFAULT_DATA;
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem('leagueData', JSON.stringify(data));
+        }
+
+        function getData() {
+            return loadData();
+        }
+
+        function renderAll() {
+            const data = getData();
+            renderTeams(data);
+            renderGoals(data);
+        }
+
+        function renderTeams(data) {
+            const tbody = document.getElementById('teamsBody');
+            const sorted = [...data.teams].sort((a, b) => b.points - a.points);
+            tbody.innerHTML = sorted.map((team, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td class="team-name">${team.name}</td>
+                    <td>${team.played}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                    <td><span class="points-highlight">${team.points}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderGoals(data) {
+            const tbody = document.getElementById('goalsBody');
+            const sorted = [...data.players].sort((a, b) => b.goals - a.goals);
+            tbody.innerHTML = sorted.map((p, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td class="team-name">${p.name}</td>
+                    <td>${p.team}</td>
+                    <td>${p.goals}</td>
+                </tr>
+            `).join('');
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('leagueData')) {
+                saveData(DEFAULT_DATA);
+            }
+            renderAll();
+            setupTabs();
+        });
+    </script>
+
+</body>
+</html>
