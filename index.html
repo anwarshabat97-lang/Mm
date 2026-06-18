@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الدوري</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tahoma', sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 25px;
+            font-size: 32px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            background: #e0e7ef;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #1e3c72;
+        }
+        .tab-btn:hover {
+            background: #cbd8e8;
+        }
+        .tab-btn.active {
+            background: #1e3c72;
+            color: white;
+            box-shadow: 0 4px 10px rgba(30,60,114,0.3);
+        }
+        .tab-content {
+            display: none;
+            animation: fade 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 14px 10px;
+            font-size: 15px;
+        }
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:hover {
+            background: #f8faff;
+        }
+        .admin-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .admin-link a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: bold;
+            background: #e0e7ef;
+            padding: 10px 25px;
+            border-radius: 30px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .admin-link a:hover {
+            background: #1e3c72;
+            color: white;
+        }
+        .admin-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .admin-panel h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .form-row .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .btn {
+            background: #1e3c72;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #2a4d8a;
+        }
+        .btn-danger {
+            background: #c0392b;
+        }
+        .btn-danger:hover {
+            background: #e74c3c;
+        }
+        .btn-success {
+            background: #27ae60;
+        }
+        .btn-success:hover {
+            background: #2ecc71;
+        }
+        .btn-small {
+            padding: 6px 15px;
+            font-size: 13px;
+            margin: 2px;
+        }
+        .hidden {
+            display: none;
+        }
+        .team-item {
+            background: #e0e7ef;
+            padding: 8px 14px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .player-item {
+            background: #d4e2f7;
+            padding: 8px 14px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .list-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        hr {
+            margin: 30px 0;
+        }
+        .lock {
+            text-align: center;
+            padding: 30px;
+        }
+        .lock input {
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            width: 250px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الصفحة الرئيسية -->
+    <div id="mainPage" class="container">
+        <h1>🏆 دوري أبطال العرب</h1>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="teams">ترتيب الفرق</button>
+            <button class="tab-btn" data-tab="goals">الهدافين</button>
+            <button class="tab-btn" data-tab="assists">صاحب أعلى أسيست</button>
+        </div>
+        <div id="teams" class="tab-content active">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>الفريق</th><th>مباريات</th><th>فوز</th><th>خسارة</th><th>نقاط</th></tr>
+                </thead>
+                <tbody id="teamsBody"></tbody>
+            </table>
+        </div>
+        <div id="goals" class="tab-content">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>اللاعب</th><th>الفريق</th><th>الأهداف</th></tr>
+                </thead>
+                <tbody id="goalsBody"></tbody>
+            </table>
+        </div>
+        <div id="assists" class="tab-content">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>اللاعب</th><th>الفريق</th><th>أسيست</th></tr>
+                </thead>
+                <tbody id="assistsBody"></tbody>
+            </table>
+        </div>
+        <div class="admin-link">
+            <a href="#" onclick="showAdmin()">🔐 لوحة التحكم (للإداري)</a>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="adminPage" class="container hidden">
+        <div id="loginSection" class="admin-panel lock">
+            <h2>🔐 أدخل كلمة السر</h2>
+            <input type="password" id="passwordInput" placeholder="كلمة السر" />
+            <button class="btn" onclick="checkPassword()">دخول</button>
+            <p id="errorMsg" style="color:red;margin-top:10px;"></p>
+            <br />
+            <button class="btn" onclick="showMain()">⬅ العودة للرئيسية</button>
+        </div>
+        <div id="adminSection" class="admin-panel" style="display:none;">
+            <h2>⚙️ لوحة التحكم - تعديل البيانات</h2>
+            
+            <h3>🏅 إضافة لاعب جديد</h3>
+            <div class="form-row">
+                <div class="form-group"><label>اسم اللاعب</label><input id="playerName" /></div>
+                <div class="form-group"><label>الفريق</label><input id="playerTeam" /></div>
+                <div class="form-group"><label>الأهداف</label><input id="playerGoals" type="number" /></div>
+                <div class="form-group"><label>الأسيست</label><input id="playerAssists" type="number" /></div>
+            </div>
+            <button class="btn btn-success" onclick="addPlayer()">➕ إضافة لاعب</button>
+            
+            <hr />
+            
+            <h3>🏆 إضافة فريق جديد</h3>
+            <div class="form-row">
+                <div class="form-group"><label>اسم الفريق</label><input id="newTeamName" placeholder="مثل: الشباب" /></div>
+            </div>
+            <button class="btn btn-success" onclick="addTeam()">➕ إضافة فريق</button>
+            
+            <hr />
+            
+            <h3>📊 تعديل نقاط الفريق</h3>
+            <div class="form-row">
+                <div class="form-group"><label>اسم الفريق</label><input id="teamName" placeholder="مثل: الهلال" /></div>
+                <div class="form-group"><label>نقاط جديدة</label><input id="teamPoints" type="number" /></div>
+                <div class="form-group"><label>فوز</label><input id="teamWins" type="number" /></div>
+                <div class="form-group"><label>خسارة</label><input id="teamLosses" type="number" /></div>
+            </div>
+            <button class="btn" onclick="updateTeam()">✏️ تحديث الفريق</button>
+            
+            <hr />
+            
+            <h3>📋 قائمة الفرق <span style="font-size:14px;color:#888;">(اضغط × لحذف الفريق)</span></h3>
+            <div id="teamsList" class="list-container"></div>
+            
+            <h3>📋 قائمة اللاعبين <span style="font-size:14px;color:#888;">(اضغط × لحذف اللاعب)</span></h3>
+            <div id="playersList" class="list-container"></div>
+            
+            <br />
+            <button class="btn btn-danger" onclick="resetData()">🔄 إعادة تعيين البيانات الافتراضية</button>
+            <br /><br />
+            <button class="btn" onclick="showMain()">⬅ العودة للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD = "admin123";
+        const DEFAULT_DATA = {
+            teams: [
+                { name: "الهلال", played: 5, wins: 4, losses: 1, points: 12 },
+                { name: "النصر", played: 5, wins: 3, losses: 2, points: 9 },
+                { name: "الاتحاد", played: 5, wins: 3, losses: 1, points: 10 },
+                { name: "الأهلي", played: 5, wins: 2, losses: 3, points: 6 }
+            ],
+            players: [
+                { name: "سالم الدوسري", team: "الهلال", goals: 8, assists: 3 },
+                { name: "كريستيانو رونالدو", team: "النصر", goals: 10, assists: 2 },
+                { name: "كريم بنزيما", team: "الاتحاد", goals: 7, assists: 5 },
+                { name: "رياض محرز", team: "الأهلي", goals: 5, assists: 4 },
+                { name: "مالكوم", team: "الهلال", goals: 6, assists: 6 }
+            ]
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem('leagueData');
+            if (saved) {
+                return JSON.parse(saved);
+            } else {
+                saveData(DEFAULT_DATA);
+                return DEFAULT_DATA;
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem('leagueData', JSON.stringify(data));
+        }
+
+        function getData() {
+            return loadData();
+        }
+
+        function renderAll() {
+            const data = getData();
+            renderTeams(data);
+            renderGoals(data);
+            renderAssists(data);
+        }
+
+        function renderTeams(data) {
+            const tbody = document.getElementById('teamsBody');
+            const sorted = [...data.teams].sort((a, b) => b.points - a.points);
+            tbody.innerHTML = sorted.map((team, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${team.name}</strong></td>
+                    <td>${team.played}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                    <td><span style="font-weight:bold;color:#1e3c72;">${team.points}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderGoals(data) {
+            const tbody = document.getElementById('goalsBody');
+            const sorted = [...data.players].sort((a, b) => b.goals - a.goals);
+            tbody.innerHTML = sorted.map((p, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.team}</td>
+                    <td>${p.goals}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAssists(data) {
+            const tbody = document.getElementById('assistsBody');
+            const sorted = [...data.players].sort((a, b) => b.assists - a.assists);
+            tbody.innerHTML = sorted.map((p, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.team}</td>
+                    <td>${p.assists}</td>
+                </tr>
+            `).join('');
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+
+        function showAdmin() {
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('adminPage').classList.remove('hidden');
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('adminSection').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMsg').textContent = '';
+        }
+
+        function showMain() {
+            document.getElementById('mainPage').classList.remove('hidden');
+            document.getElementById('adminPage').classList.add('hidden');
+            renderAll();
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === PASSWORD) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'block';
+                loadAdminData();
+            } else {
+                document.getElementById('errorMsg').textContent = '❌ كلمة سر خاطئة';
+            }
+        }
+
+        function loadAdminData() {
+            const data = getData();
+            displayTeams(data.teams);
+            displayPlayers(data.players);
+        }
+
+        function displayTeams(teams) {
+            const container = document.getElementById('teamsList');
+            container.innerHTML = teams.map((t, index) => `
+                <span class="team-item">
+                    ${t.name} (${t.points} نقاط)
+                    <button class="btn btn-danger btn-small" onclick="deleteTeam(${index})">✕</button>
+                </span>
+            `).join('');
+        }
+
+        function displayPlayers(players) {
+            const container = document.getElementById('playersList');
+            container.innerHTML = players.map((p, index) => `
+                <span class="player-item">
+                    ${p.name} - ${p.team} (⚽${p.goals} | 🅰${p.assists})
+                    <button class="btn btn-danger btn-small" onclick="deletePlayer(${index})">✕</button>
+                </span>
+            `).join('');
+        }
+
+        function deletePlayer(index) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا اللاعب؟')) return;
+            const data = getData();
+            data.players.splice(index, 1);
+            saveData(data);
+            loadAdminData();
+            alert('✅ تم حذف اللاعب');
+        }
+
+        function deleteTeam(index) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذا الفريق؟')) return;
+            const data = getData();
+            const teamName = data.teams[index].name;
+            data.teams.splice(index, 1);
+            data.players = data.players.filter(p => p.team !== teamName);
+            saveData(data);
+            loadAdminData();
+            alert('✅ تم حذف الفريق وجميع لاعبيه');
+        }
+
+        function addPlayer() {
+            const name = document.getElementById('playerName').value.trim();
+            const team = document.getElementById('playerTeam').value.trim();
+            const goals = parseInt(document.getElementById('playerGoals').value) || 0;
+            const assists = parseInt(document.getElementById('playerAssists').value) || 0;
+            if (!name || !team) {
+                alert('يرجى ملء اسم اللاعب والفريق');
+                return;
+            }
+            const data = getData();
+            data.players.push({ name, team, goals, assists });
+            saveData(data);
+            alert('✅ تم إضافة اللاعب');
+            loadAdminData();
+            document.getElementById('playerName').value = '';
+            document.getElementById('playerTeam').value = '';
+            document.getElementById('playerGoals').value = '';
+            document.getElementById('playerAssists').value = '';
+        }
+
+        function addTeam() {
+            const name = document.getElementById('newTeamName').value.trim();
+            if (!name) {
+                alert('يرجى كتابة اسم الفريق');
+                return;
+            }
+            const data = getData();
+            if (data.teams.some(t => t.name === name)) {
+                alert('❌ هذا الفريق موجود بالفعل');
+                return;
+            }
+            data.teams.push({ name, played: 0, wins: 0, losses: 0, points: 0 });
+            saveData(data);
+            alert('✅ تم إضافة الفريق');
+            loadAdminData();
+            document.getElementById('newTeamName').value = '';
+        }
+
+        function updateTeam() {
+            const name = document.getElementById('teamName').value.trim();
+            const points = parseInt(document.getElementById('teamPoints').value);
+            const wins = parseInt(document.getElementById('teamWins').value);
+            const losses = parseInt(document.getElementById('teamLosses').value);
+            if (!name || isNaN(points) || isNaN(wins) || isNaN(losses)) {
+                alert('يرجى ملء جميع الحقول');
+                return;
+            }
+            const data = getData();
+            const team = data.teams.find(t => t.name === name);
+            if (!team) {
+                alert('❌ الفريق غير موجود');
+                return;
+            }
+            team.points = points;
+            team.wins = wins;
+            team.losses = losses;
+            team.played = wins + losses;
+            saveData(data);
+            alert('✅ تم تحديث الفريق');
+            loadAdminData();
+            document.getElementById('teamName').value = '';
+            document.getElementById('teamPoints').value = '';
+            document.getElementById('teamWins').value = '';
+            document.getElementById('teamLosses').value = '';
+        }
+
+        function resetData() {
+            if (confirm('⚠️ هل أنت متأكد؟ سيتم حذف جميع التعديلات')) {
+                saveData(DEFAULT_DATA);
+                alert('✅ تم إعادة التعيين');
+                loadAdminData();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('leagueData')) {
+                saveData(DEFAULT_DATA);
+            }
+            renderAll();
+            setupTabs();
+        });
+    </script>
+
+</body>
+</html>
